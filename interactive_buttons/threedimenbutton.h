@@ -1,7 +1,6 @@
 #ifndef THREEDIMENBUTTON_H
 #define THREEDIMENBUTTON_H
 
-#include <QObject>
 #include <QGraphicsDropShadowEffect>
 #include "interactivebuttonbase.h"
 
@@ -26,13 +25,13 @@ protected:
 	QPainterPath getBgPainterPath() override;
 	QPainterPath getWaterPainterPath(InteractiveButtonBase::Water water) override;
 
-    void simulateStatePress(bool s = true) override;
-    bool inArea(QPoint point) override;
+    void simulateStatePress(bool s = true, bool a = false) override;
+    bool inArea(QPointF point) override;
 
 private:
-	int cha_cheng(QPoint a, QPoint b);
-	int dian_cheng(QPoint a, QPoint b);
-	QPoint limitPointXY(QPoint v, int w, int h);
+    double cha_cheng(QPointF a, QPointF b);
+    double dian_cheng(QPointF a, QPointF b);
+    QPointF limitPointXY(QPointF v, int w, int h);
 
 protected:
 	QGraphicsDropShadowEffect* shadow_effect;

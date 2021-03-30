@@ -1,7 +1,7 @@
 #include "winclosebutton.h"
 
 WinCloseButton::WinCloseButton(QWidget *parent)
-    : InteractiveButtonBase (parent)
+    : InteractiveButtonBase (parent), tr_radius(0)
 {
     setUnifyGeomerey(true);
 }
@@ -28,7 +28,12 @@ void WinCloseButton::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setPen(QPen(icon_color));
     painter.setRenderHint(QPainter::Antialiasing,true);
-    if (offset_pos != QPoint(0,0))
+    if (offset_pos == QPoint(0,0))
+    {
+        painter.drawLine(QPoint(l,t), QPoint(r,b));
+        painter.drawLine(QPoint(r,t), QPoint(l,b));
+    }
+    else
     {
         QPainterPath path;
         path.moveTo(QPoint(l,t));
@@ -38,11 +43,32 @@ void WinCloseButton::paintEvent(QPaintEvent *event)
 
         painter.drawPath(path);
     }
-    else
-    {
-        painter.drawLine(QPoint(l,t), QPoint(r,b));
-        painter.drawLine(QPoint(r,t), QPoint(l,b));
-    }
+}
 
+/**
+ * 针对圆角的设置
+ */
+void WinCloseButton::setTopRightRadius(int r)
+{
+    tr_radius = r;
+}
 
+QPainterPath WinCloseButton::getBgPainterPath()
+{
+    if (!tr_radius)
+        return InteractiveButtonBase::getBgPainterPath();
+
+    QPainterPath path = InteractiveButtonBase::getBgPainterPath();
+    QPainterPath round_path;
+    round_path.addEllipse(width() - tr_radius - tr_radius, 0, tr_radius*2, tr_radius*2);
+    QPainterPath corner_path;
+    corner_path.addRect(width() - tr_radius, 0, tr_radius, tr_radius);
+    corner_path -= round_path;
+    path -= corner_path;
+    return path;
+}
+
+QPainterPath WinCloseButton::getWaterPainterPath(Water water)
+{
+    return InteractiveButtonBase::getWaterPainterPath(water) & WinCloseButton::getBgPainterPath();
 }

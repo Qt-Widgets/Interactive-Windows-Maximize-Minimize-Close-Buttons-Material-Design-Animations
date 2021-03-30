@@ -10,10 +10,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setMouseTracking(true);
 
+    InteractiveButtonBase* btn0 = new InteractiveButtonBase(this);
+    btn0->setGeometry(0, 0, 120, 32);
+    btn0->setIcon(QIcon(":/icons/point_menu"));
+
     InteractiveButtonBase* btn = new InteractiveButtonBase(this);
     btn->setGeometry(110, 100, 100, 100);
     btn->setBgColor(QColor(128, 0, 0, 100));
     btn->setRadius(5);
+
+    AppendButton* append_btn = new AppendButton(this);
+    append_btn->setGeometry(304, 10, 32, 32);
+
+    InfoButton* info_btn = new InfoButton(this);
+    info_btn->setGeometry(336, 10, 32, 32);
 
     WinMenuButton* menu_btn = new WinMenuButton(this);
     menu_btn->setGeometry(368, 10, 32, 32);
@@ -58,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
     par_btn->setGeometry(270, 50, 100, 32);
     par_btn->setParentEnabled(true);
     par_btn->setForeEnabled(false);
-    par_btn->setStyleSheet("qproperty-text: asdasd; color: red; ");
+    par_btn->setStyleSheet("qproperty-text: asdasd; color: red; qproperty-press_color: green;");
 
     QPushButton* push_btn = new QPushButton("parent", this);
     push_btn->setGeometry(370, 50, 100, 32);
@@ -72,6 +82,14 @@ MainWindow::MainWindow(QWidget *parent) :
     tdb->setGeometry(220, 100, 200, 100);
     tdb->setBgColor(Qt::gray);
     connect(tdb, &ThreeDimenButton::clicked, [=]{ qDebug() << "3D按钮clicked"; });
+    connect(tdb, &ThreeDimenButton::signalMouseEnter, [=]{ qDebug() << "mouseEnter"; });
+    connect(tdb, &ThreeDimenButton::signalMouseLeave, [=]{ qDebug() << "mouseLeave"; });
+    connect(tdb, &ThreeDimenButton::signalMouseEnterLater, [=]{ qDebug() << "mouseEnterLater"; });
+    connect(tdb, &ThreeDimenButton::signalMouseLeaveLater, [=]{ qDebug() << "mouseLeaveLater"; });
+    connect(tdb, &ThreeDimenButton::signalMousePress, [=](QMouseEvent*){ qDebug() << "mousePress"; });
+    connect(tdb, &ThreeDimenButton::signalMouseRelease, [=](QMouseEvent*){ qDebug() << "mouseRelease"; });
+    connect(tdb, &ThreeDimenButton::signalMousePressLater, [=](QMouseEvent*){ qDebug() << "mousePressLater"; });
+    connect(tdb, &ThreeDimenButton::signalMouseReleaseLater, [=](QMouseEvent*){ qDebug() << "mouseReleaseLater"; });
 
     WaterZoomButton* zoom_btn1 = new WaterZoomButton("tttttttttt", this);
     zoom_btn1->setGeometry(300, 200, 200, 50);
@@ -90,6 +108,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(double_btn, &InteractiveButtonBase::doubleClicked, [=]{
         qDebug() << "双击";
     });
+
+    InteractiveButtonBase* icon_text_btn = new InteractiveButtonBase(QIcon(":/icons/point_menu"), "菜单", this);
+    icon_text_btn->setGeometry(100, 210, 100, 40);
 }
 
 void MainWindow::enterEvent(QEvent *event)

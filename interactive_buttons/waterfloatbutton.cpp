@@ -4,14 +4,14 @@ WaterFloatButton::WaterFloatButton(QWidget *parent) : InteractiveButtonBase(pare
         in_area(false), mwidth(16), radius(8)
 {
     fore_enabled = false;
-    icon_paddings.left = icon_paddings.right = radius;
+    fore_paddings.left = fore_paddings.right = radius;
 }
 
 WaterFloatButton::WaterFloatButton(QString s, QWidget *parent) : InteractiveButtonBase(s, parent),
         in_area(false), mwidth(16), radius(8)
 {
     fore_enabled = false;
-    icon_paddings.left = icon_paddings.right = radius;
+    fore_paddings.left = fore_paddings.right = radius;
 }
 
 void WaterFloatButton::enterEvent(QEvent *event)
@@ -144,13 +144,15 @@ void WaterFloatButton::paintEvent(QPaintEvent *event)
         QColor color;
         if (pro)
         {
-            QColor aim_color = isLightColor(hover_bg) ? QColor(0,0,0) : QColor(255,255,255);
-            color = QColor(
-                        text_color.red() + (aim_color.red()-text_color.red()) * pro / 100,
-                        text_color.green() + (aim_color.green()-text_color.green()) * pro / 100,
-                        text_color.blue() + (aim_color.blue()-text_color.blue()) * pro / 100,
-                        255
-                        );
+            if (auto_text_color)
+            {
+                QColor aim_color = isLightColor(hover_bg) ? QColor(0, 0, 0) : QColor(255, 255, 255);
+                color = QColor(
+                    text_color.red() + (aim_color.red() - text_color.red()) * pro / 100,
+                    text_color.green() + (aim_color.green() - text_color.green()) * pro / 100,
+                    text_color.blue() + (aim_color.blue() - text_color.blue()) * pro / 100,
+                    255);
+            }
             painter.setPen(color);
         }
         else
